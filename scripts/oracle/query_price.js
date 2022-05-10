@@ -7,17 +7,14 @@ import {
   LCDClient,
 } from "@terra-money/terra.js";
 
-const cw20Contract = "terra1g4h0t9qn3f7djcv9fv4tuzgr73rqvehvnlxqj0";
-const walletAddress = wallets.wallet1.key.accAddress;
+const cw20Contract = "terra1wlkefxppr029xezhpeude9vz0vuwnuhkvk470z";
 
 const response = await client.wasm.contractQuery(
-  // Address of CW20 contract.
+  // Address of Oracle contract.
   cw20Contract,
   // QueryMsg payload.
   {
-    balance: {
-      address: walletAddress
-    }
+    query_price: {}
   }
 );
 
