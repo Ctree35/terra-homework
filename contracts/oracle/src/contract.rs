@@ -1,6 +1,6 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_binary};
+use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_binary, Uint128};
 use cw2::set_contract_version;
 use crate::ContractError::Unauthorized;
 
@@ -56,7 +56,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 pub fn try_update_price(
     deps: DepsMut,
     info: MessageInfo,
-    price: u64,
+    price: Uint128,
 ) -> Result<Response, ContractError> {
     let state = STATE.load(deps.storage)?;
     if info.sender != state.owner {
@@ -91,7 +91,7 @@ mod tests {
     fn proper_initialization() {
         let mut deps = mock_dependencies(&[]);
 
-        let msg = InstantiateMsg { price: 17 };
+        let msg = InstantiateMsg { price: Uint128::from(17u64) };
         let info = mock_info("creator", &coins(1000, "earth"));
 
         // we can just call .unwrap() to assert this was a success
@@ -102,7 +102,7 @@ mod tests {
         let res = query(deps.as_ref(), mock_env(), QueryMsg::QueryPrice {}).unwrap();
         let value: PriceResponse = from_binary(&res).unwrap();
         // assert_eq!(res, Err(StdError::generic_err("not implemented")));
-        assert_eq!(17, value.price);
+        assert_eq!(Uint128::from(17u64), value.price);
     }
 
     #[test]

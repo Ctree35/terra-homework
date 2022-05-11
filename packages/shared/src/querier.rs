@@ -1,8 +1,10 @@
 use cosmwasm_std::{
     to_binary, Addr, AllBalanceResponse, BalanceResponse, BankQuery, Coin, QuerierWrapper,
-    QueryRequest, StdResult, Uint128, WasmQuery,
+    QueryRequest, StdResult, Uint128, WasmQuery
 };
 use cw20::{BalanceResponse as Cw20BalanceResponse, Cw20QueryMsg, TokenInfoResponse};
+use crate::oracle::{OracleQueryMsg, PriceResponse};
+
 /// ## Description
 /// Returns the balance of the denom at the specified account address.
 /// ## Params
@@ -92,4 +94,21 @@ pub fn query_supply(querier: &QuerierWrapper, contract_addr: &Addr) -> StdResult
         msg: to_binary(&Cw20QueryMsg::TokenInfo {})?,
     }))?;
     Ok(res.total_supply)
+}
+
+
+pub fn query_price(
+    querier: &QuerierWrapper,
+    contract_addr: &Addr
+) -> StdResult<Uint128> {
+    let res: PriceResponse = querier
+        .query(&QueryRequest::Wasm(WasmQuery::Smart {
+            contract_addr: String::from(contract_addr),
+            msg: to_binary(&OracleQueryMsg::Price {})?,
+        }))
+        .unwrap_or_else(|_| PriceResponse {
+            price: Uint128::zero(),
+        });
+
+    Ok(res.price)
 }

@@ -6,7 +6,7 @@ import {
   Coins,
 } from "@terra-money/terra.js";
 
-const contract = "terra1f7vnhhk24jmaxp2tdgf906yy980yg3c4h8f05h";
+const contract = "terra1yvgrck4hh5vaz7frnhp3ncx0h0hafslkk0h3md";
 const wallet = wallets.wallet1;
 
 const amount = (0.1 * 1e6).toFixed(0);
