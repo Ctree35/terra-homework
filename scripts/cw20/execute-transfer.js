@@ -19,7 +19,7 @@ const msg = new MsgExecuteContract(
     {
         transfer: {
           // Address of wallet or contract that is getting the tokens
-          recipient: "terra1yvgrck4hh5vaz7frnhp3ncx0h0hafslkk0h3md",
+          recipient: "terra1ee8c8xfrwtj60c720l6hvzqguatjklu5qxgd2u",
           // Amount of tokens to transfer, in microunits
           amount: "100000000",
         },

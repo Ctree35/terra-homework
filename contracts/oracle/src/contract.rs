@@ -5,9 +5,9 @@ use cw2::set_contract_version;
 use crate::ContractError::Unauthorized;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, PriceResponse, QueryMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{State, STATE};
-
+use shared::oracle::PriceResponse;
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:oracle";

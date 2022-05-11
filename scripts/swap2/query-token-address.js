@@ -1,6 +1,6 @@
 import { client, wallets } from '../library.js';
 
-const contract = "terra1yvgrck4hh5vaz7frnhp3ncx0h0hafslkk0h3md";
+const contract = "terra1ee8c8xfrwtj60c720l6hvzqguatjklu5qxgd2u";
 
 const response = await client.wasm.contractQuery(contract, { query_token_address: {} });
 

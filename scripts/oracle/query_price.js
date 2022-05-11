@@ -7,7 +7,7 @@ import {
   LCDClient,
 } from "@terra-money/terra.js";
 
-const cw20Contract = "terra1wlkefxppr029xezhpeude9vz0vuwnuhkvk470z";
+const cw20Contract = "terra1hh2qamsvhgjwpahfycawtzwttft8wxf0l4c926";
 
 const response = await client.wasm.contractQuery(
   // Address of Oracle contract.

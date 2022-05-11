@@ -104,7 +104,7 @@ pub fn query_price(
     let res: PriceResponse = querier
         .query(&QueryRequest::Wasm(WasmQuery::Smart {
             contract_addr: String::from(contract_addr),
-            msg: to_binary(&OracleQueryMsg::Price {})?,
+            msg: to_binary(&OracleQueryMsg::QueryPrice {})?,
         }))
         .unwrap_or_else(|_| PriceResponse {
             price: Uint128::zero(),

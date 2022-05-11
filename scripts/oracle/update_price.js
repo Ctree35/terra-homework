@@ -7,7 +7,7 @@ import {
     LCDClient,
 } from "@terra-money/terra.js";
 
-const oracleContract = "terra1wlkefxppr029xezhpeude9vz0vuwnuhkvk470z";
+const oracleContract = "terra1hh2qamsvhgjwpahfycawtzwttft8wxf0l4c926";
 const wallet = wallets.wallet3;
 
 const msg = new MsgExecuteContract(

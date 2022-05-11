@@ -1,10 +1,11 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{Binary, Deps, DepsMut, Empty, Env, MessageInfo, Response, StdResult, to_binary, Uint128, BankMsg, coins, Addr, CosmosMsg, WasmMsg};
+use cosmwasm_std::{Binary, Deps, DepsMut, Empty, Env, MessageInfo, Response, StdResult, to_binary, Uint128, BankMsg, coins, Addr, CosmosMsg, WasmMsg, from_binary};
 use cw2::set_contract_version;
 use cw20_legacy::msg::ExecuteMsg::Transfer;
+use shared::oracle::{OracleQueryMsg, PriceResponse};
 use shared::querier::{query_balance, query_price, query_token_balance};
-use crate::ContractError::{InsufficientContractBalance, InvalidQuantity, Unauthorized};
+use crate::ContractError::{InsufficientContractBalance, InvalidQuantity, Unauthorized, ZeroPrice};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
@@ -78,8 +79,14 @@ pub fn try_buy(
         return Err(InvalidQuantity);
     }
     let state = STATE.load(deps.storage)?;
-    let price = query_price(&deps.querier, &state.oracle_address)?;
-    let saku_value: Uint128 = luna_value / price;
+    // let price = query_price(&deps.querier, &state.oracle_address)?;
+    let res: PriceResponse = deps.querier.query_wasm_smart(&state.oracle_address, &OracleQueryMsg::QueryPrice {})?;
+    // return Ok(Response::new().add_attribute("query", res.price.to_string()));
+    // let res: PriceResponse = from_binary(&query_res)?;
+    if res.price.is_zero() {
+        return Err(ZeroPrice);
+    }
+    let saku_value = luna_value.checked_div(res.price).unwrap();
     let contract_balance = query_token_balance(&deps.querier, &state.token_address, &env.contract.address)?;
     if contract_balance < saku_value {
         return Err(InsufficientContractBalance);
@@ -91,7 +98,7 @@ pub fn try_buy(
     let res = WasmMsg::Execute {
         contract_addr: String::from(state.token_address),
         msg: to_binary(&msg)?,
-        funds: coins(0, "uluna"),
+        funds: vec![],
     };
     Ok(Response::new()
         .add_message(CosmosMsg::Wasm(res))
@@ -130,7 +137,8 @@ pub fn query_token_address(deps: Deps) -> StdResult<Addr> {
 #[cfg(test)]
 mod tests {
     use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
-    use cosmwasm_std::{Addr, coins, from_binary, Uint128};
+    use cosmwasm_std::{Addr, coins, from_binary, to_binary, Uint128};
+    use shared::oracle::OracleQueryMsg;
     use crate::contract::{instantiate, query};
     use crate::msg::{InstantiateMsg, QueryMsg};
     #[test]
@@ -155,6 +163,12 @@ mod tests {
         let a = Uint128::from(100000u64);
         let b = Uint128::from(110u64);
         let c: Uint128 = a / b;
-        println!("{}", c)
+        println!("{}", c);
+
+        let msg = to_binary(&OracleQueryMsg::QueryPrice {}).unwrap();
+        println!("{}", msg);
+
+        let env = mock_env();
+        println!("{}", env.contract.address.to_string())
     }
 }

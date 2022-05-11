@@ -7,9 +7,9 @@
       }
     },
     "oracle": {
-      "codeId": "71055",
+      "codeId": "71185",
       "contractAddresses": {
-        "default": "terra1wlkefxppr029xezhpeude9vz0vuwnuhkvk470z"
+        "default": "terra1hh2qamsvhgjwpahfycawtzwttft8wxf0l4c926"
       }
     },
     "cw20_token": {
@@ -19,9 +19,9 @@
       }
     },
     "swap": {
-      "codeId": "71079",
+      "codeId": "71186",
       "contractAddresses": {
-        "default": "terra1yvgrck4hh5vaz7frnhp3ncx0h0hafslkk0h3md"
+        "default": "terra1ee8c8xfrwtj60c720l6hvzqguatjklu5qxgd2u"
       }
     },
     "swap2": {

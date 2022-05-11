@@ -15,6 +15,8 @@ pub enum ContractError {
 
     #[error("contract balance is insufficient")]
     InsufficientContractBalance,
+    #[error("the price is zero")]
+    ZeroPrice,
 
     #[error("Not implemented")]
     NotImplemented {},

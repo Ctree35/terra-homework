@@ -1,12 +1,12 @@
 import { client, wallets } from '../library.js';
 
 import {
-  MsgExecuteContract,
-  Coins,
+    MsgExecuteContract,
+    Coin, Coins,
 } from "@terra-money/terra.js";
 
 // Address of the Lemon Swap contract.
-const contract = "terra1yvgrck4hh5vaz7frnhp3ncx0h0hafslkk0h3md";
+const contract = "terra1ee8c8xfrwtj60c720l6hvzqguatjklu5qxgd2u";
 // Wallet to use. Make sure to use the right wallet from library.js.
 const wallet = wallets.wallet3;
 
@@ -22,7 +22,7 @@ const msg = new MsgExecuteContract(
     buy: {},
   },
   // Send Luna with this execute message.
-  new Coins({ uluna: amount }),
+  new Coins([new Coin("uluna", amount)]),
 );
 
 const tx = await wallet.createAndSignTx({ msgs: [msg] });
